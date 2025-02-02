@@ -6,33 +6,30 @@ raw_urls = [
     "https://raw.githubusercontent.com/FunctionError/PiratesTvPlus/main/PiratesPlus.m3u"
 ]
 
-# File where the playlist will be stored
+# Output file (playlist)
 playlist_file = "playlist.m3u"
 
-# Function to download content from URL and append to playlist
-def download_and_add_to_playlist(url):
+# Function to download and save content
+def download_and_save(url):
     try:
-        print(f"Downloading content from: {url}")  # Debugging: Show URL being fetched
+        print(f"Downloading: {url}")
         response = requests.get(url)
-        response.raise_for_status()  # Check for successful response
-        
-        # Debugging: Show the first 100 characters of the response
-        print(f"Received content: {response.text[:100]}...")  # Show first 100 characters
+        response.raise_for_status()  # Check if the request was successful
 
-        # Append content to the playlist file using UTF-8 encoding
-        with open(playlist_file, 'a', encoding='utf-8') as f:  # Use UTF-8 encoding here
-            f.write(response.text)
-            f.write("\n")  # Add a newline after each file's content
+        # Append to the file
+        with open(playlist_file, 'a', encoding='utf-8') as f:
+            f.write(response.text + "\n")
+
         print(f"Added content from: {url}")
     except requests.exceptions.RequestException as e:
         print(f"Error downloading {url}: {e}")
 
-# Create a new playlist or update the existing one
-with open(playlist_file, 'w', encoding='utf-8') as f:  # Use UTF-8 encoding when creating the file
-    f.write("# Playlist generated automatically\n")
+# Create or reset the playlist file
+with open(playlist_file, 'w', encoding='utf-8') as f:
+    f.write("# Auto-updated playlist\n")
 
-# Download raw files and add to the playlist
+# Download all playlists
 for url in raw_urls:
-    download_and_add_to_playlist(url)
+    download_and_save(url)
 
-print(f"Playlist {playlist_file} updated successfully.")
+print("✅ Playlist update complete!")
