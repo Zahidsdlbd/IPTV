@@ -3,21 +3,21 @@ name: Update Playlist
 on:
   push:
     paths:
-      - 'raw_files/*'  # This triggers the workflow when files in the 'raw_files' folder are changed
-  workflow_dispatch:  # Allows manual triggering from GitHub Actions tab
+      - 'raw_files/*'  # Trigger this workflow when files in 'raw_files' folder change
+  workflow_dispatch:  # Allows you to manually trigger the workflow from GitHub
 
 jobs:
   update-playlist:
-    runs-on: ubuntu-latest  # Uses Ubuntu environment to run the script
-    
+    runs-on: ubuntu-latest  # Runs on an Ubuntu virtual machine
+
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2  # Checks out the repository code
+      uses: actions/checkout@v2  # This checks out your GitHub repository code
 
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'  # Install Python
+        python-version: '3.x'  # Make sure Python is set up
 
     - name: Install dependencies
       run: |
@@ -25,4 +25,12 @@ jobs:
 
     - name: Run the update playlist script
       run: |
-        python update_playlist.py  # Run the Python script
+        python update_playlist.py  # Run the Python script to update playlist.m3u
+
+    - name: Commit and push updated playlist
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add playlist.m3u  # Add the updated playlist file
+        git commit -m "Update playlist.m3u" || echo "No changes to commit"  # Avoid error if there are no changes
+        git push  # Push the changes to GitHub
