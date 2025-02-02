@@ -6,7 +6,7 @@ raw_urls = [
     "https://raw.githubusercontent.com/FunctionError/PiratesTvPlus/main/PiratesPlus.m3u"
 ]
 
-# File where the playlist will be stored
+# File where the playlist will be stored in the current directory
 playlist_file = "playlist.m3u"
 
 # Function to download content from URL and append to playlist
